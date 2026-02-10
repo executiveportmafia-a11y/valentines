@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Aditiii 💖</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-pink: #ff8fab;
+            --dark-pink: #fb6f92;
+            --soft-bg: #fff0f3;
+            --accent: #ffb3c1;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            font-family: 'Poppins', sans-serif;
+            overflow: hidden;
+            background-color: var(--soft-bg);
+        }
+
+        .slide {
+            display: none;
+            height: 100vh;
+            width: 100vw;
+            background-size: cover;
+            background-position: center;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+            box-sizing: border-box;
+            position: absolute;
+        }
+
+        .active { display: flex; }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(8px);
+            padding: 30px;
+            border-radius: 25px;
+            box-shadow: 0 10px 30px rgba(251, 111, 146, 0.2);
+            max-width: 85%;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        h1, h2 { font-family: 'Playfair Display', serif; color: var(--dark-pink); margin-bottom: 15px; }
+        p { font-size: 1rem; line-height: 1.6; color: #555; font-weight: 400; }
+
+        button {
+            background: var(--dark-pink);
+            color: white;
+            border: none;
+            padding: 14px 35px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+            box-shadow: 0 4px 15px rgba(251, 111, 146, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        button:active { transform: scale(0.92); }
+
+        /* Progress Bar */
+        .loader-container { width: 100%; background: #f0f0f0; border-radius: 20px; height: 12px; margin-top: 25px; overflow: hidden; }
+        .loader-bar { height: 100%; background: linear-gradient(90deg, #ff8fab, #fb6f92); width: 0%; transition: width 0.1s linear; }
+
+        /* Wheel Styles */
+        .wheel-container { position: relative; width: 320px; height: 320px; margin: 20px 0; }
+        #wheelCanvas { width: 100%; height: 100%; border-radius: 50%; box-shadow: 0 0 20px rgba(0,0,0,0.1); border: 5px solid white; }
+        .pointer {
+            position: absolute; top: -15px; left: 50%; transform: translateX(-50%);
+            width: 0; height: 0; border-left: 18px solid transparent;
+            border-right: 18px solid transparent; border-top: 35px solid #333;
+            z-index: 10; drop-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        /* Web-based Custom Popup */
+        .popup {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6); display: none; align-items: center;
+            justify-content: center; z-index: 1000; backdrop-filter: blur(4px);
+        }
+        .popup-content {
+            background: white; padding: 40px; border-radius: 30px; text-align: center;
+            max-width: 80%; transform: scale(0.7); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .popup.show { display: flex; }
+        .popup.show .popup-content { transform: scale(1); }
+
+        /* Valentine Logic */
+        .val-btns { display: flex; gap: 15px; margin-top: 30px; justify-content: center; width: 100%; }
+        #no-btn { position: relative; background: #999; }
+
+        /* Hearts for finale */
+        .heart {
+            position: absolute; bottom: -10%; font-size: 2rem;
+            animation: moveHearts 4s linear infinite; opacity: 0; pointer-events: none;
+        }
+        @keyframes moveHearts {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
+        }
+
+        .final-img { max-width: 90%; border-radius: 20px; border: 8px solid white; box-shadow: 0 15px 40px rgba(0,0,0,0.2); }
+    </style>
+</head>
+<body>
+
+    <audio id="bgMusic" loop>
+        <source src="https://files.catbox.moe/g2xvse.mp3" type="audio/mpeg">
+    </audio>
+
+    <div id="slide1" class="slide active" style="background-image: url('https://i.ibb.co/TxPmNQC0/IMG-0524.jpg');">
+        <div class="glass-card">
+            <p>Hey Aditiii, How are you? I hope you’re not scrolling through reels while I send this to you. Anyways, prepare yourself. You will have to make some tough decisions today. I know it won’t be easy, only press “Proceed” if you are ready.</p>
+            <p style="font-size: 0.8rem; opacity: 0.7;">Note: Take a SS of every slide to register your answer.</p>
+            <button id="btn1" onclick="startLoading(1, 30000)">Proceed</button>
+            <div id="loader1" class="loader-container" style="display:none;"><div class="loader-bar"></div></div>
+        </div>
+    </div>
+
+    <div id="slide-wheel" class="slide">
+        <h2 id="wheel-title">Cuisine</h2>
+        <div class="wheel-container">
+            <div class="pointer"></div>
+            <canvas id="wheelCanvas" width="400" height="400"></canvas>
+        </div>
+        <button id="spinBtn" onclick="spinWheel()">SPIN! ✨</button>
+    </div>
+
+    <div id="slide6" class="slide">
+        <div class="glass-card">
+            <p>Thank you for answering all the questions <333333333 you receive a free additional Ice Cream and head pats.</p>
+            <img src="https://media.tenor.com/E6_S9v9u_V4AAAAC/head-pat-anime.gif" width="180" style="border-radius: 15px; margin: 10px 0;">
+            <p>Now before the final question there is a note I want you to read.</p>
+            <button id="btn6" onclick="startLoading(6, 10000)">Proceed</button>
+            <div id="loader6" class="loader-container" style="display:none;"><div class="loader-bar"></div></div>
+        </div>
+    </div>
+
+    <div id="slide7" class="slide" style="background-image: url('https://i.ibb.co/wN9XBssj/IMG-0533.jpg');">
+        <button style="position: absolute; bottom: 50px; right: 30px; padding: 15px 25px;" onclick="nextSlide(8)">➔</button>
+    </div>
+
+    <div id="slide8" class="slide" style="background-image: url('https://i.ibb.co/JRLYybWs/IMG-0526.jpg');">
+        <div class="glass-card">
+            <h2>Baby, will you be my valentine? 💌</h2>
+            <div class="val-btns">
+                <button id="yesBtn" onclick="handleYes()">Yes</button>
+                <button id="no-btn" onmouseover="moveNo()" ontouchstart="moveNo()">No</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="slide9" class="slide" style="background-color: #ffb3c1;">
+        <img src="https://i.ibb.co/tPbTwfk8/IMG-0532.jpg" class="final-img">
+        <div id="hearts-container"></div>
+    </div>
+
+    <div id="customPopup" class="popup">
+        <div class="popup-content">
+            <h2 id="popuptext" style="font-size: 1.5rem;"></h2>
+            <button onclick="closePopup()">Continue</button>
+        </div>
+    </div>
+
+    <div id="yesPopup" class="popup">
+        <div class="popup-content">
+            <h1 style="font-size: 2.5rem;">💖</h1>
+            <h2>Thank you for saying yes!! 💖💖</h2>
+            <button onclick="finalize()">See Our Surprise</button>
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 1;
+        const bgMusic = document.getElementById('bgMusic');
+        
+        // Multi-color palette for the wheel
+        const wheelColors = ["#FF6B6B", "#FFD93D", "#6BCB77", "#4D96FF", "#9D4EDD", "#FF9248"];
+
+        const wheels = [
+            { title: "Pick a Cuisine 🍝", options: ["Italian 🇮🇹", "Mexican 🇲🇽", "Japanese 🇯🇵", "Indian 🇮🇳", "Chinese 🇨🇳", "European 🇫🇷"] },
+            { title: "Pick a Dessert 🍰", options: ["Tiramisu 🍰", "Cheesecake 🍰", "Choco Strawberry 🍓"] },
+            { title: "Post Dessert Drink ☕", options: ["Frappe ☕", "Hot Chocolate 🍫", "Boba 🧋", "Matcha 🍵"] },
+            { title: "The Activity 🤗", options: ["Cute cuddles 🤗", "Intense makeout 🫦", "Both 🫶🏻🫶🏻"] }
+        ];
+
+        let wheelIdx = 0;
+        let startAngle = 0;
+        let arc = 0;
+
+        function nextSlide(n) {
+            document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+            if(n === 'wheel') {
+                document.getElementById('slide-wheel').classList.add('active');
+                setupWheel();
+            } else {
+                document.getElementById('slide' + n).classList.add('active');
+            }
+        }
+
+        function startLoading(slideNum, duration) {
+            document.getElementById('btn' + slideNum).style.display = 'none';
+            const container = document.getElementById('loader' + slideNum);
+            const bar = container.querySelector('.loader-bar');
+            container.style.display = 'block';
+            
+            let start = null;
+            function step(timestamp) {
+                if (!start) start = timestamp;
+                let progress = timestamp - start;
+                let width = (progress / duration) * 100;
+                bar.style.width = Math.min(width, 100) + '%';
+                if (progress < duration) {
+                    requestAnimationFrame(step);
+                } else {
+                    if(slideNum === 1) nextSlide('wheel');
+                    if(slideNum === 6) {
+                        bgMusic.play();
+                        nextSlide(7);
+                    }
+                }
+            }
+            requestAnimationFrame(step);
+        }
+
+        function setupWheel() {
+            const canvas = document.getElementById("wheelCanvas");
+            const ctx = canvas.getContext("2d");
+            const data = wheels[wheelIdx];
+            document.getElementById('wheel-title').innerText = data.title;
+            arc = Math.PI / (data.options.length / 2);
+            
+            ctx.clearRect(0,0,400,400);
+            data.options.forEach((opt, i) => {
+                const angle = startAngle + i * arc;
+                ctx.fillStyle = wheelColors[i % wheelColors.length];
+                ctx.beginPath();
+                ctx.moveTo(200, 200);
+                ctx.arc(200, 200, 190, angle, angle + arc, false);
+                ctx.lineTo(200, 200);
+                ctx.fill();
+                ctx.strokeStyle = "white";
+                ctx.lineWidth = 2;
+                ctx.stroke();
+
+                ctx.save();
+                ctx.fillStyle = "white";
+                ctx.font = "bold 16px Poppins";
+                ctx.translate(200 + Math.cos(angle + arc / 2) * 120, 200 + Math.sin(angle + arc / 2) * 120);
+                ctx.rotate(angle + arc / 2 + Math.PI / 2);
+                ctx.fillText(opt, -ctx.measureText(opt).width / 2, 0);
+                ctx.restore();
+            });
+        }
+
+        function spinWheel() {
+            document.getElementById('spinBtn').disabled = true;
+            let spinTimeTotal = 4000;
+            let spinTime = 0;
+            let spinAngleStart = Math.random() * 10 + 15;
+            
+            function rotate() {
+                spinTime += 30;
+                if(spinTime >= spinTimeTotal) {
+                    const data = wheels[wheelIdx];
+                    const degrees = startAngle * 180 / Math.PI + 90;
+                    const arcd = arc * 180 / Math.PI;
+                    const index = Math.floor((360 - degrees % 360) / arcd);
+                    const result = data.options[(index + data.options.length) % data.options.length];
+                    
+                    document.getElementById('popuptext').innerText = "Yayy!! You got " + result + " 💖";
+                    document.getElementById('customPopup').classList.add('show');
+                    return;
+                }
+                let spinAngle = spinAngleStart - easeOut(spinTime, 0, spinAngleStart, spinTimeTotal);
+                startAngle += (spinAngle * Math.PI / 180);
+                setupWheel();
+                setTimeout(rotate, 30);
+            }
+            rotate();
+        }
+
+        function easeOut(t, b, c, d) { return b + c * ( (t=t/d-1)*t*t + 1); }
+
+        function closePopup() {
+            document.getElementById('customPopup').classList.remove('show');
+            document.getElementById('spinBtn').disabled = false;
+            wheelIdx++;
+            if(wheelIdx < wheels.length) {
+                setupWheel();
+            } else {
+                nextSlide(6);
+            }
+        }
+
+        function moveNo() {
+            const btn = document.getElementById('no-btn');
+            btn.style.position = 'fixed';
+            btn.style.left = Math.random() * (window.innerWidth - 80) + 'px';
+            btn.style.top = Math.random() * (window.innerHeight - 50) + 'px';
+        }
+
+        function handleYes() {
+            document.getElementById('yesPopup').classList.add('show');
+        }
+
+        function finalize() {
+            document.getElementById('yesPopup').classList.remove('show');
+            nextSlide(9);
+            createHearts();
+        }
+
+        function createHearts() {
+            const container = document.getElementById('hearts-container');
+            setInterval(() => {
+                const heart = document.createElement('div');
+                heart.classList.add('heart');
+                heart.innerHTML = ['❤️','💖','💝','💗'][Math.floor(Math.random()*4)];
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.fontSize = (Math.random() * 20 + 20) + 'px';
+                heart.style.animationDuration = (Math.random() * 2 + 3) + 's';
+                container.appendChild(heart);
+                setTimeout(() => heart.remove(), 4000);
+            }, 250);
+        }
+    </script>
+</body>
+</html>
