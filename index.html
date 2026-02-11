@@ -2,350 +2,353 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>For Aditiii 💖</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Playfair+Display:ital,wght@0,700;1,700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
-        :root {
-            --primary-pink: #ff8fab;
-            --dark-pink: #fb6f92;
-            --soft-bg: #fff0f3;
+        :root { 
+            --primary-pink: #ff8fab; 
+            --dark-pink: #d81b60; 
+            --heart-red: #ff0a54;
+            --soft-bg: #fff0f3; 
+            --wood: #3d2b1f; 
+            --glass: rgba(255, 255, 255, 0.85);
         }
 
-        body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            width: 100%;
-            font-family: 'Poppins', sans-serif;
-            overflow: hidden;
-            background-color: var(--soft-bg);
-        }
+        body, html { margin: 0; padding: 0; height: 100%; width: 100%; font-family: 'Poppins', sans-serif; overflow: hidden; background-color: var(--soft-bg); }
 
-        .slide {
-            display: none;
-            height: 100vh;
-            width: 100vw;
-            background-size: cover;
-            background-position: center;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 20px;
-            box-sizing: border-box;
-            position: absolute;
-        }
-
-        .active { display: flex; }
-
-        .glass-card {
-            background: rgba(255, 255, 255, 0.92);
-            backdrop-filter: blur(8px);
-            padding: 25px;
-            border-radius: 25px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            max-width: 85%;
-            border: 1px solid rgba(255,255,255,0.3);
-        }
-
-        h2 { font-family: 'Playfair Display', serif; color: var(--dark-pink); margin-top: 0; }
-        p { font-size: 0.95rem; line-height: 1.6; color: #444; }
-
-        button {
-            background: var(--dark-pink);
-            color: white;
-            border: none;
-            padding: 14px 35px;
-            border-radius: 50px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            margin-top: 15px;
-            box-shadow: 0 4px 15px rgba(251, 111, 146, 0.4);
-            transition: all 0.3s ease;
-            z-index: 100;
-        }
-
-        .loader-container { width: 100%; background: #f0f0f0; border-radius: 20px; height: 10px; margin-top: 20px; overflow: hidden; }
-        .loader-bar { height: 100%; background: linear-gradient(90deg, #ff8fab, #fb6f92); width: 0%; transition: width 0.1s linear; }
-
-        .wheel-container { position: relative; width: 280px; height: 280px; margin: 15px 0; }
-        #wheelCanvas { width: 100%; height: 100%; border-radius: 50%; border: 4px solid white; box-shadow: 0 0 15px rgba(0,0,0,0.1); }
-        .pointer {
-            position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
-            width: 0; height: 0; border-left: 15px solid transparent;
-            border-right: 15px solid transparent; border-top: 30px solid #333;
-            z-index: 10;
-        }
-
-        .popup {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.6); display: none; align-items: center;
-            justify-content: center; z-index: 2000; backdrop-filter: blur(4px);
-        }
-        .popup-content { background: white; padding: 30px; border-radius: 30px; text-align: center; max-width: 80%; transform: scale(0.7); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        .popup.show { display: flex; }
-        .popup.show .popup-content { transform: scale(1); }
-
-        .val-btns { display: flex; gap: 15px; margin-top: 25px; justify-content: center; width: 100%; position: relative; height: 50px; }
-        #no-btn { position: absolute; transition: 0.15s ease; }
-
-        .heart { position: absolute; bottom: -10%; font-size: 2rem; animation: moveHearts 4s linear infinite; opacity: 0; pointer-events: none; }
-        @keyframes moveHearts {
-            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
-        }
-
-        /* Image sizing used for task 4 and task 6 */
-        .standard-img { 
-            max-width: 85%; 
-            max-height: 70vh;
-            border-radius: 20px; 
-            border: 8px solid white; 
-            box-shadow: 0 15px 40px rgba(0,0,0,0.2); 
-            object-fit: contain;
-        }
-
-        .arrow-btn { 
-            font-size: 2.2rem; 
-            background: white; 
-            color: var(--dark-pink); 
-            border-radius: 50%; 
-            width: 60px; 
-            height: 60px; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
+        /* INTRO LAYER: Text falls from above */
+        #intro-layer { 
+            position: fixed; inset: 0; z-index: 1000; 
+            display: flex; align-items: center; justify-content: center; 
+            background: #000; transition: transform 1.2s cubic-bezier(0.77, 0, 0.175, 1); 
             cursor: pointer; 
-            border: none;
-            margin-top: 25px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
+        #intro-layer.hidden { transform: translateY(-100%); }
+        .intro-bg { 
+            position: absolute; inset: 0; 
+            background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('https://i.ibb.co/LzF73jrf/image-2026-02-11-050244172.png'); 
+            background-size: cover; background-position: center; 
+        }
+        .intro-text { 
+            position: relative; z-index: 2; 
+            font-family: 'Dancing Script', cursive; font-size: 10vw; 
+            color: #ff8fab; text-shadow: 0 0 25px rgba(0, 0, 0, 0.8); 
+            text-align: center;
+            animation: fallIn 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes fallIn {
+            0% { transform: translateY(-100vh); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+
+        .slide { display: none; height: 100vh; width: 100vw; background-size: cover; background-position: center; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; box-sizing: border-box; position: absolute; opacity: 0; transition: all 0.8s ease; }
+        .active { display: flex; opacity: 1; z-index: 5; }
+        .premium-bg { background-image: linear-gradient(rgba(255,255,255,0.1), rgba(255,255,255,0.1)), url('https://i.ibb.co/LzF73jrf/image-2026-02-11-050244172.png'); }
+
+        .glass-card { background: var(--glass); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); padding: 30px; border-radius: 35px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); max-width: 85%; border: 1px solid rgba(255,255,255,0.6); animation: slideUp 0.8s ease forwards; }
+        @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+        h2 { font-family: 'Playfair Display', serif; color: var(--dark-pink); margin-top: 0; font-size: 1.6rem; letter-spacing: 1px; }
+        p { font-size: 0.95rem; line-height: 1.6; color: #444; }
+        button { background: linear-gradient(135deg, var(--primary-pink), var(--dark-pink)); color: white; border: none; padding: 16px 35px; border-radius: 50px; font-size: 1.1rem; font-weight: 600; cursor: pointer; margin-top: 15px; box-shadow: 0 8px 15px rgba(216, 27, 96, 0.3); transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        button:active { transform: scale(0.92); }
+
+        /* Game Elements */
+        .wheel-container { position: relative; width: 300px; height: 300px; margin: 15px 0; }
+        #wheelCanvas { width: 100%; height: 100%; border-radius: 50%; border: 10px solid white; box-shadow: 0 15px 30px rgba(0,0,0,0.15); }
+        #scratch-container { position: relative; width: 260px; height: 260px; margin: 20px auto; border-radius: 25px; overflow: hidden; background: white; border: 8px solid white; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .emoji-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 20px 0; perspective: 1000px; }
+        .emoji-card { width: 80px; height: 80px; background: white; border-radius: 18px; display: flex; align-items: center; justify-content: center; font-size: 2.2rem; cursor: pointer; transition: transform 0.6s; transform-style: preserve-3d; border: 2px solid #ffeef2; }
+        .emoji-card .back { position: absolute; width: 100%; height: 100%; background: linear-gradient(135deg, var(--primary-pink), var(--dark-pink)); border-radius: 16px; backface-visibility: hidden; }
+        .emoji-card.flipped { transform: rotateY(180deg); }
+        .coin-container { perspective: 1000px; width: 160px; height: 160px; margin: 20px auto; }
+        .coin { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 5s cubic-bezier(0.1, 0, 0.1, 1); }
+        .face { position: absolute; width: 100%; height: 100%; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; backface-visibility: hidden; border: 6px solid #ffd700; box-shadow: inset 0 0 20px rgba(0,0,0,0.2); }
+        .heads { background: linear-gradient(45deg, #ffd700, #ffae00); color: #5c4300; }
+        .tails { background: linear-gradient(45deg, #ffd700, #ffae00); color: #5c4300; transform: rotateY(180deg); }
+
+        /* Suspense Slide Extras */
+        #stars-container { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+        .star { position: absolute; background: white; border-radius: 50%; animation: twinkle var(--duration) infinite; }
+        .heart-node { background-color: var(--heart-red); height: 150px; width: 150px; transform: rotate(-45deg); position: relative; box-shadow: 0 0 50px rgba(255, 10, 84, 0.5); }
+        .heart-node::before, .heart-node::after { content: ""; background-color: var(--heart-red); border-radius: 50%; height: 150px; width: 150px; position: absolute; }
+        .heart-node::before { top: -75px; left: 0; }
+        .heart-node::after { left: 75px; top: 0; }
+        #countdown-num { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(45deg); color: white; font-size: 4rem; font-weight: bold; font-family: 'Playfair Display', serif; }
+        @keyframes pulse-heart { 0% { transform: rotate(-45deg) scale(1); } 50% { transform: rotate(-45deg) scale(1.15); } 100% { transform: rotate(-45deg) scale(1); } }
+
+        .loader-container { width: 100%; background: #fff; border-radius: 20px; height: 12px; margin-top: 20px; overflow: hidden; border: 1px solid #eee; }
+        .loader-bar { height: 100%; background: linear-gradient(to right, var(--primary-pink), var(--dark-pink)); width: 0%; }
+        .standard-img { max-width: 90%; max-height: 50vh; border-radius: 15px; border: 6px solid white; box-shadow: 0 15px 30px rgba(0,0,0,0.3); }
+        .embed-img { width: 100%; max-width: 280px; border-radius: 20px; margin: 15px 0; }
+        .popup { position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: none; align-items: center; justify-content: center; z-index: 9999; backdrop-filter: blur(8px); }
+        .popup-content { background: white; padding: 35px; border-radius: 30px; text-align: center; max-width: 80%; transform: scale(0.7); opacity: 0; transition: 0.5s; }
+        .popup.show { display: flex; }
+        .popup.show .popup-content { transform: scale(1); opacity: 1; }
+
+        /* HEART RAIN EFFECT */
+        #hearts-rain-container { position: absolute; inset: 0; pointer-events: none; z-index: 100; overflow: hidden; }
+        .heart-float { position: absolute; bottom: -10%; font-size: 2rem; animation: floatUp var(--dur) linear infinite; opacity: 0; }
+        @keyframes floatUp { 0% { transform: translateY(0) scale(1); opacity: 1; } 100% { transform: translateY(-110vh) scale(1.5); opacity: 0; } }
     </style>
 </head>
 <body>
 
-    <audio id="bgMusic" loop preload="auto">
-        <source src="https://files.catbox.moe/g2xvse.mp3" type="audio/mpeg">
-    </audio>
+<div id="intro-layer" onclick="closeIntro()">
+    <div class="intro-bg"></div>
+    <div class="intro-text">To my baby, Aditi</div>
+    <div style="position:absolute; bottom: 10%; color: #fff; font-size: 0.8rem; letter-spacing: 3px; opacity: 0.8;">TAP TO OPEN</div>
+</div>
 
-    <div id="slide1" class="slide active" style="background-image: url('https://i.ibb.co/TxPmNQC0/IMG-0524.jpg');">
-        <div class="glass-card">
-            <p>Hey Aditiii, How are you? I hope you’re not scrolling through reels while I send this to you. Anyways, prepare yourself. You will have to make some tough decisions today. I know it won’t be easy, only press “Proceed” if you are ready.</p>
-            <p style="font-size: 0.75rem; opacity: 0.7;">Note: Take a SS of every slide to register your answer.</p>
-            <button id="btn1" onclick="startLoading(1, 30000)">Proceed</button>
-            <div id="loader1" class="loader-container" style="display:none;"><div class="loader-bar"></div></div>
-        </div>
+<audio id="bgMusic" loop preload="auto"><source src="https://files.catbox.moe/bwin5r.mp3" type="audio/mpeg"></audio>
+
+<div id="slide1" class="slide active premium-bg">
+    <div class="glass-card">
+        <p>Hey Aditiii, How are you? I hope you’re not scrolling through reels while I send this to you. Anyways, prepare yourself. You will have to make some tough decisions today. I know it won’t be easy, only press “Proceed” if you are ready.</p>
+        <p style="font-size: 0.8rem; color: #888;">Note: Take a SS of every slide to register your answer.</p>
+        <button id="btn1" onclick="startLoading(1, 30000)">Proceed</button>
+        <div id="loader1" class="loader-container" style="display:none;"><div class="loader-bar"></div></div>
     </div>
+</div>
 
-    <div id="slide-wheel" class="slide" style="background-image: url('https://i.ibb.co/TxPmNQC0/IMG-0524.jpg');">
-        <div class="glass-card">
-            <h2 id="wheel-title" style="font-size: 1.4rem;">Cuisine</h2>
-            <div class="wheel-container">
-                <div class="pointer"></div>
-                <canvas id="wheelCanvas" width="400" height="400"></canvas>
+<div id="slide-wheel" class="slide premium-bg">
+    <div class="glass-card">
+        <h2>Cuisine 🍝</h2>
+        <div class="wheel-container">
+            <div style="position: absolute; top: -15px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 15px solid transparent; border-right: 15px solid transparent; border-top: 30px solid var(--dark-pink); z-index: 10;"></div>
+            <canvas id="wheelCanvas" width="400" height="400"></canvas>
+        </div>
+        <button id="spinBtn" onclick="spinWheel()">SPIN! ✨</button>
+    </div>
+</div>
+
+<div id="slide-scratch" class="slide premium-bg">
+    <div class="glass-card">
+        <h2>Scratch for Dessert 🍰</h2>
+        <div id="scratch-container">
+            <div style="position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                <h1 style="font-size: 4rem; margin:0;">🍰</h1>
+                <p style="font-weight: bold; color: var(--dark-pink);">Cheesecake!</p>
             </div>
-            <button id="spinBtn" onclick="spinWheel()">SPIN! ✨</button>
+            <canvas id="scratch-canvas" width="260" height="260" style="position: absolute; inset: 0; z-index: 2; touch-action: none;"></canvas>
         </div>
+        <button id="scratchNext" style="display:none;" onclick="nextSlide('match')">Next Game</button>
     </div>
+</div>
 
-    <div id="slide6" class="slide" style="background-image: url('https://i.ibb.co/TxPmNQC0/IMG-0524.jpg');">
-        <div class="glass-card">
-            <p>Thank you for answering all the questions <333333333 you receive a free additional Ice Cream and head pats.</p>
-            <img src="https://i.ibb.co/hJL89Nh2/IMG-0527.gif" width="160" style="border-radius: 15px; margin: 10px 0;">
-            <p>Now before the final question there is a note I want you to read.</p>
-            <button id="btn6" onclick="startLoading(6, 10000)">Proceed</button>
-            <div id="loader6" class="loader-container" style="display:none;"><div class="loader-bar"></div></div>
-        </div>
+<div id="slide-match" class="slide premium-bg">
+    <div class="glass-card">
+        <h2>Match the Treats ☕</h2>
+        <div class="emoji-grid" id="emoji-grid"></div>
+        <button id="matchBtnNext" style="display:none;" onclick="nextSlide('coin')">Proceed</button>
     </div>
+</div>
 
-    <div id="slide7" class="slide" style="background-color: var(--soft-bg);">
-        <img src="https://i.ibb.co/wN9XBssj/IMG-0533.jpg" class="standard-img">
-        <button class="arrow-btn" onclick="nextSlide(8)">➔</button>
-    </div>
-
-    <div id="slide8" class="slide" style="background-image: url('https://i.ibb.co/JRLYybWs/IMG-0526.jpg');">
-        <div class="glass-card">
-            <h2>Baby, will you be my valentine? 💌</h2>
-            <div class="val-btns">
-                <button id="yesBtn" onclick="handleYes()">Yes</button>
-                <button id="no-btn" onmouseover="moveNo()" ontouchstart="moveNo()">No</button>
+<div id="slide-coin" class="slide premium-bg">
+    <div class="glass-card">
+        <h2>Final Activity 🪙</h2>
+        <div class="coin-container" onclick="flipCoin()">
+            <div class="coin" id="coin">
+                <div class="face heads">Cuddles 🤗</div>
+                <div class="face tails">Makeout 🫦</div>
             </div>
         </div>
+        <p id="coin-status" style="margin-top:10px; color: var(--dark-pink); font-weight: 600;">Tap to Flip!</p>
+        <button id="coinBtnNext" style="display:none;" onclick="nextSlide(6)">Next Slide</button>
     </div>
+</div>
 
-    <div id="slide9" class="slide" style="background-color: #ffb3c1;">
-        <img src="https://i.ibb.co/tPbTwfk8/IMG-0532.jpg" class="standard-img">
-        <div id="hearts-container"></div>
+<div id="slide6" class="slide premium-bg">
+    <div class="glass-card">
+        <p>Thank you for answering all the questions <333333333 you receive a free additional Ice Cream and head pats.</p>
+        <img src="https://i.ibb.co/hJL89Nh2/IMG-0527.gif" width="180" style="border-radius: 20px; margin: 15px 0;">
+        <p>Now before the final question there is a note I want you to read.</p>
+        <button id="btn6" onclick="startLoading(6, 10000)">Proceed</button>
+        <div id="loader6" class="loader-container" style="display:none;"><div class="loader-bar"></div></div>
     </div>
+</div>
 
-    <div id="customPopup" class="popup">
-        <div class="popup-content">
-            <h2 id="popuptext"></h2>
-            <button onclick="closePopup()">Continue</button>
+<div id="slide7" class="slide" style="background-color: var(--wood); background-image: url('https://www.transparenttextures.com/patterns/dark-wood.png');">
+    <img src="https://i.ibb.co/wN9XBssj/IMG-0533.jpg" class="standard-img" style="transform: rotate(-1deg);">
+    <button style="border-radius: 50%; width: 75px; height: 75px; margin-top: 30px; display: flex; align-items: center; justify-content: center; font-size: 2rem;" onclick="startEternalCountdown()">➔</button>
+</div>
+
+<div id="slide-suspense" class="slide" style="background-color: #050505;">
+    <div id="stars-container"></div>
+    <div class="heart-node" id="heart-node"><div id="countdown-num">5</div></div>
+</div>
+
+<div id="slide8" class="slide" style="background-image: url('https://i.ibb.co/JRLYybWs/IMG-0526.jpg');">
+    <div class="glass-card">
+        <h2 style="font-size: 1.2rem;">Baby, will you be the Gwen Stacey to my Spiderman? Will you be my Valentine? 💌</h2>
+        <img src="https://i.ibb.co/bgcDdG0f/image-2026-02-11-044418153.png" alt="Spiderman-Gwen" class="embed-img">
+        <div style="display: flex; gap: 20px; justify-content: center; height: 60px; position: relative; width: 100%;">
+            <button onclick="handleYes()">Yes</button>
+            <button id="no-btn" onmouseover="moveNo()" ontouchstart="moveNo()" style="position:absolute; right: 10%;">No</button>
         </div>
     </div>
+</div>
 
-    <div id="yesPopup" class="popup">
-        <div class="popup-content">
-            <h1 style="font-size: 2.5rem; margin:0;">💖</h1>
-            <h2>Thank you for saying yes!! 💖💖</h2>
-            <button onclick="finalize()">See Our Surprise</button>
-        </div>
-    </div>
+<div id="slide9" class="slide" style="background-color: #ffb3c1;">
+    <div id="hearts-rain-container"></div>
+    <img src="https://i.ibb.co/tPbTwfk8/IMG-0532.jpg" class="standard-img" style="z-index: 2;">
+</div>
 
-    <script>
-        let currentSlide = 1;
-        const bgMusic = document.getElementById('bgMusic');
-        const wheelColors = ["#FF6B6B", "#FFD93D", "#6BCB77", "#4D96FF", "#9D4EDD", "#FF9248"];
+<div id="wheelPopup" class="popup"><div class="popup-content"><h2 id="wheelText"></h2><button onclick="closeWheelPopup()">Continue</button></div></div>
+<div id="matchPopup" class="popup"><div class="popup-content"><h2>🏆 Champion! 🏆</h2><p>Yay!! you won a Hot-Chocolate ☕</p><button onclick="closeMatchPopup()">Continue</button></div></div>
+<div id="coinPopup" class="popup"><div class="popup-content"><h2>✨ Decision Time! ✨</h2><p id="coinPopupText">Looks like we are doing both! ❤️</p><button onclick="closeCoinPopup()">Yayy! Next</button></div></div>
+<div id="yesPopup" class="popup"><div class="popup-content"><h1>💖</h1><h2>Thank you for saying yes!! 💖💖</h2><button onclick="finalize()">See Our Surprise</button></div></div>
 
-        const wheels = [
-            { title: "Pick a Cuisine 🍝", options: ["Italian 🇮🇹", "Mexican 🇲🇽", "Japanese 🇯🇵", "Indian 🇮🇳", "Chinese 🇨🇳", "European 🇫🇷"] },
-            { title: "Pick a Dessert 🍰", options: ["Tiramisu 🍰", "Cheesecake 🍰", "Choco Strawberry 🍓"] },
-            { title: "Post Dessert Drink ☕", options: ["Frappe ☕", "Hot Chocolate 🍫", "Boba 🧋", "Matcha 🍵"] },
-            { title: "The Activity 🤗", options: ["Cute cuddles 🤗", "Intense makeout 🫦", "Both 🫶🏻🫶🏻"] }
-        ];
+<script>
+    const bgMusic = document.getElementById('bgMusic');
+    const cuisine = ["Italian 🇮🇹", "Mexican 🇲🇽", "Japanese 🇯🇵", "Indian 🇮🇳", "Chinese 🇨🇳", "European 🇫🇷"];
+    const colors = ["#FF6B6B", "#FFD93D", "#6BCB77", "#4D96FF", "#9D4EDD", "#FF9248"];
+    let startAngle = 0;
 
-        let wheelIdx = 0;
-        let startAngle = 0;
-        let arc = 0;
+    function closeIntro() { document.getElementById('intro-layer').classList.add('hidden'); bgMusic.play(); }
 
-        function nextSlide(n) {
-            document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
-            if(n === 'wheel') {
-                document.getElementById('slide-wheel').classList.add('active');
-                setupWheel();
-            } else {
-                const target = document.getElementById('slide' + n);
-                if(target) target.classList.add('active');
+    function nextSlide(n) {
+        document.querySelectorAll('.slide').forEach(s => { s.classList.remove('active'); s.style.opacity = '0'; });
+        const target = (typeof n === 'string') ? document.getElementById('slide-' + n) : document.getElementById('slide' + n);
+        target.classList.add('active');
+        setTimeout(() => target.style.opacity = '1', 50);
+        if(n === 'wheel') setupWheel();
+        if(n === 'scratch') initScratch();
+        if(n === 'match') initMatch();
+    }
+
+    function startLoading(n, d) {
+        document.getElementById('btn' + n).style.display = 'none';
+        const loader = document.getElementById('loader' + n);
+        const bar = loader.querySelector('.loader-bar');
+        loader.style.display = 'block';
+        let s = null;
+        function step(t) {
+            if(!s) s = t;
+            let p = Math.min(((t-s)/d)*100, 100);
+            bar.style.width = p + '%';
+            if(p < 100) requestAnimationFrame(step);
+            else { if(n === 1) nextSlide('wheel'); else nextSlide(7); }
+        }
+        requestAnimationFrame(step);
+    }
+
+    function setupWheel() {
+        const ctx = document.getElementById("wheelCanvas").getContext("2d");
+        ctx.clearRect(0,0,400,400);
+        for(let i=0; i<6; i++) {
+            const angle = startAngle + i * (Math.PI/3);
+            ctx.fillStyle = colors[i];
+            ctx.beginPath(); ctx.moveTo(200, 200); ctx.arc(200, 200, 190, angle, angle + (Math.PI/3)); ctx.fill();
+            ctx.save(); ctx.fillStyle = "white"; ctx.font = "bold 18px Poppins";
+            ctx.translate(200+Math.cos(angle+Math.PI/6)*120, 200+Math.sin(angle+Math.PI/6)*120);
+            ctx.rotate(angle+Math.PI/6+Math.PI/2); ctx.fillText(cuisine[i], -ctx.measureText(cuisine[i]).width/2, 0); ctx.restore();
+        }
+    }
+
+    function spinWheel() {
+        document.getElementById('spinBtn').disabled = true;
+        let vel = 0.8 + Math.random()*0.4;
+        function decay() {
+            startAngle += vel; vel *= 0.988; setupWheel();
+            if(vel > 0.001) requestAnimationFrame(decay);
+            else { 
+                const idx = Math.floor(((360 - (startAngle*180/Math.PI)%360 + 270)%360)/60);
+                document.getElementById('wheelText').innerText = "Yayy!! You got " + cuisine[idx % 6] + " 💖";
+                showPopup('wheelPopup'); 
             }
         }
+        decay();
+    }
+    function closeWheelPopup() { hidePopup('wheelPopup'); nextSlide('scratch'); }
 
-        function startLoading(slideNum, duration) {
-            if(slideNum === 6) {
-                bgMusic.play().catch(e => console.log("Audio play blocked until interaction"));
-            }
+    function initScratch() {
+        const cvs = document.getElementById('scratch-canvas'); const ctx = cvs.getContext('2d');
+        ctx.fillStyle = '#C0C0C0'; ctx.fillRect(0,0,260,260);
+        ctx.fillStyle = '#666'; ctx.font = "bold 20px Poppins"; ctx.fillText("Scratch to Reveal!", 40, 135);
+        let cleared = 0;
+        function scrap(e) {
+            const r = cvs.getBoundingClientRect();
+            const x = (e.pageX || e.touches[0].pageX) - r.left; const y = (e.pageY || e.touches[0].pageY) - r.top;
+            ctx.globalCompositeOperation = 'destination-out'; ctx.beginPath(); ctx.arc(x, y, 25, 0, Math.PI*2); ctx.fill();
+            cleared++; if(cleared > 100) document.getElementById('scratchNext').style.display = 'block';
+        }
+        cvs.addEventListener('touchmove', e => { e.preventDefault(); scrap(e); }, {passive: false});
+        cvs.addEventListener('mousemove', e => e.buttons === 1 && scrap(e));
+    }
 
-            document.getElementById('btn' + slideNum).style.display = 'none';
-            const container = document.getElementById('loader' + slideNum);
-            const bar = container.querySelector('.loader-bar');
-            container.style.display = 'block';
-            
-            let start = null;
-            function step(timestamp) {
-                if (!start) start = timestamp;
-                let progress = timestamp - start;
-                let width = (progress / duration) * 100;
-                bar.style.width = Math.min(width, 100) + '%';
-                if (progress < duration) {
-                    requestAnimationFrame(step);
-                } else {
-                    if(slideNum === 1) nextSlide('wheel');
-                    if(slideNum === 6) nextSlide(7);
+    function initMatch() {
+        const grid = document.getElementById('emoji-grid'); grid.innerHTML = '';
+        const items = ['🍫','🍫','🍩','🍩','🍵','🍵'].sort(() => Math.random() - 0.5);
+        let active = []; let pairs = 0;
+        items.forEach(emoji => {
+            const card = document.createElement('div'); card.className = 'emoji-card';
+            card.innerHTML = `<div class="back"></div>${emoji}`;
+            card.onclick = () => {
+                if(active.length < 2 && !card.classList.contains('flipped')) {
+                    card.classList.add('flipped'); active.push(card);
+                    if(active.length === 2) {
+                        if(active[0].innerText === active[1].innerText) { pairs++; active = []; if(pairs === 3) setTimeout(() => showPopup('matchPopup'), 600); }
+                        else { setTimeout(() => { active.forEach(c => c.classList.remove('flipped')); active = []; }, 800); }
+                    }
                 }
+            };
+            grid.appendChild(card);
+        });
+    }
+    function closeMatchPopup() { hidePopup('matchPopup'); document.getElementById('matchBtnNext').style.display = 'inline-block'; }
+
+    function flipCoin() {
+        const coin = document.getElementById('coin');
+        coin.style.transform = `translateY(-100px) rotateY(${3600 + Math.random()*360}deg)`;
+        setTimeout(() => { coin.style.transform += ` translateY(100px)`; showPopup('coinPopup'); }, 5100);
+    }
+    function closeCoinPopup() { hidePopup('coinPopup'); document.getElementById('coinBtnNext').style.display = 'inline-block'; }
+
+    function startEternalCountdown() {
+        nextSlide('suspense');
+        const sc = document.getElementById('stars-container');
+        for(let i=0; i<80; i++) {
+            const s = document.createElement('div'); s.className = 'star';
+            s.style.width = s.style.height = Math.random()*3+'px';
+            s.style.left = Math.random()*100+'%'; s.style.top = Math.random()*100+'%';
+            s.style.setProperty('--duration', (Math.random()*3+2)+'s'); sc.appendChild(s);
+        }
+        let count = 5;
+        const countEl = document.getElementById('countdown-num');
+        const heart = document.getElementById('heart-node');
+        const timer = setInterval(() => {
+            count--; if(count >= 0) { countEl.textContent = count; heart.style.animation = 'none'; void heart.offsetWidth; heart.style.animation = 'pulse-heart 0.6s ease-in-out'; }
+            if(count === 0) {
+                clearInterval(timer);
+                setTimeout(() => { countEl.innerHTML = "∞"; heart.style.backgroundColor = "#fff"; setTimeout(() => nextSlide(8), 1500); }, 1000);
             }
-            requestAnimationFrame(step);
-        }
+        }, 1000);
+    }
 
-        function setupWheel() {
-            const canvas = document.getElementById("wheelCanvas");
-            const ctx = canvas.getContext("2d");
-            const data = wheels[wheelIdx];
-            document.getElementById('wheel-title').innerText = data.title;
-            arc = Math.PI / (data.options.length / 2);
-            
-            ctx.clearRect(0,0,400,400);
-            data.options.forEach((opt, i) => {
-                const angle = startAngle + i * arc;
-                ctx.fillStyle = wheelColors[i % wheelColors.length];
-                ctx.beginPath();
-                ctx.moveTo(200, 200);
-                ctx.arc(200, 200, 190, angle, angle + arc, false);
-                ctx.lineTo(200, 200);
-                ctx.fill();
-                ctx.strokeStyle = "white";
-                ctx.lineWidth = 2;
-                ctx.stroke();
+    function moveNo() { const b = document.getElementById('no-btn'); b.style.left = Math.random()*70+'%'; b.style.top = Math.random()*70+'%'; }
+    function handleYes() { confetti({ particleCount: 200, spread: 80, origin: { y: 0.6 } }); showPopup('yesPopup'); }
+    
+    function finalize() { 
+        hidePopup('yesPopup'); 
+        nextSlide(9); 
+        const rainContainer = document.getElementById('hearts-rain-container');
+        setInterval(() => {
+            const h = document.createElement('div'); 
+            h.className = 'heart-float'; 
+            h.innerHTML = '❤️';
+            h.style.left = Math.random() * 100 + 'vw'; 
+            h.style.setProperty('--dur', (Math.random()*3 + 2) + 's');
+            rainContainer.appendChild(h);
+            setTimeout(() => h.remove(), 4000);
+        }, 250); 
+    }
 
-                ctx.save();
-                ctx.fillStyle = "white";
-                ctx.font = "bold 15px Poppins";
-                ctx.translate(200 + Math.cos(angle + arc / 2) * 120, 200 + Math.sin(angle + arc / 2) * 120);
-                ctx.rotate(angle + arc / 2 + Math.PI / 2);
-                ctx.fillText(opt, -ctx.measureText(opt).width / 2, 0);
-                ctx.restore();
-            });
-        }
-
-        function spinWheel() {
-            document.getElementById('spinBtn').disabled = true;
-            let spinTimeTotal = 3500;
-            let spinTime = 0;
-            let spinAngleStart = Math.random() * 10 + 15;
-            
-            function rotate() {
-                spinTime += 30;
-                if(spinTime >= spinTimeTotal) {
-                    const data = wheels[wheelIdx];
-                    const degrees = startAngle * 180 / Math.PI + 90;
-                    const arcd = arc * 180 / Math.PI;
-                    const index = Math.floor((360 - degrees % 360) / arcd);
-                    const result = data.options[(index + data.options.length) % data.options.length];
-                    
-                    document.getElementById('popuptext').innerText = "Yayy!! You got " + result + " 💖";
-                    document.getElementById('customPopup').classList.add('show');
-                    return;
-                }
-                let spinAngle = spinAngleStart - (spinTime/spinTimeTotal * spinAngleStart * 0.5);
-                startAngle += (spinAngle * Math.PI / 180);
-                setupWheel();
-                setTimeout(rotate, 30);
-            }
-            rotate();
-        }
-
-        function closePopup() {
-            document.getElementById('customPopup').classList.remove('show');
-            document.getElementById('spinBtn').disabled = false;
-            wheelIdx++;
-            if(wheelIdx < wheels.length) {
-                setupWheel();
-            } else {
-                nextSlide(6);
-            }
-        }
-
-        function moveNo() {
-            const btn = document.getElementById('no-btn');
-            const x = Math.random() * (window.innerWidth - 120);
-            const y = Math.random() * (window.innerHeight - 80);
-            btn.style.left = x + 'px';
-            btn.style.top = y + 'px';
-        }
-
-        function handleYes() {
-            document.getElementById('yesPopup').classList.add('show');
-        }
-
-        function finalize() {
-            document.getElementById('yesPopup').classList.remove('show');
-            nextSlide(9);
-            createHearts();
-        }
-
-        function createHearts() {
-            const container = document.getElementById('hearts-container');
-            setInterval(() => {
-                const heart = document.createElement('div');
-                heart.classList.add('heart');
-                heart.innerHTML = ['❤️','💖','💝','💗'][Math.floor(Math.random()*4)];
-                heart.style.left = Math.random() * 100 + 'vw';
-                heart.style.animationDuration = (Math.random() * 2 + 2) + 's';
-                container.appendChild(heart);
-                setTimeout(() => heart.remove(), 4000);
-            }, 250);
-        }
-    </script>
+    function showPopup(id) { document.getElementById(id).style.display = 'flex'; setTimeout(() => document.getElementById(id).classList.add('show'), 10); }
+    function hidePopup(id) { document.getElementById(id).classList.remove('show'); setTimeout(() => document.getElementById(id).style.display = 'none', 600); }
+</script>
 </body>
 </html>
