@@ -18,7 +18,6 @@
 
         body, html { margin: 0; padding: 0; height: 100%; width: 100%; font-family: 'Poppins', sans-serif; overflow: hidden; background-color: var(--soft-bg); }
 
-        /* INTRO LAYER: Text falls from above */
         #intro-layer { 
             position: fixed; inset: 0; z-index: 1000; 
             display: flex; align-items: center; justify-content: center; 
@@ -56,7 +55,6 @@
         button { background: linear-gradient(135deg, var(--primary-pink), var(--dark-pink)); color: white; border: none; padding: 16px 35px; border-radius: 50px; font-size: 1.1rem; font-weight: 600; cursor: pointer; margin-top: 15px; box-shadow: 0 8px 15px rgba(216, 27, 96, 0.3); transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         button:active { transform: scale(0.92); }
 
-        /* Game Elements */
         .wheel-container { position: relative; width: 300px; height: 300px; margin: 15px 0; }
         #wheelCanvas { width: 100%; height: 100%; border-radius: 50%; border: 10px solid white; box-shadow: 0 15px 30px rgba(0,0,0,0.15); }
         #scratch-container { position: relative; width: 260px; height: 260px; margin: 20px auto; border-radius: 25px; overflow: hidden; background: white; border: 8px solid white; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
@@ -70,14 +68,14 @@
         .heads { background: linear-gradient(45deg, #ffd700, #ffae00); color: #5c4300; }
         .tails { background: linear-gradient(45deg, #ffd700, #ffae00); color: #5c4300; transform: rotateY(180deg); }
 
-        /* Suspense Slide Extras */
         #stars-container { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
         .star { position: absolute; background: white; border-radius: 50%; animation: twinkle var(--duration) infinite; }
-        .heart-node { background-color: var(--heart-red); height: 150px; width: 150px; transform: rotate(-45deg); position: relative; box-shadow: 0 0 50px rgba(255, 10, 84, 0.5); }
+        .heart-wrapper { position: relative; display: flex; align-items: center; justify-content: center; width: 200px; height: 200px; }
+        .heart-node { background-color: var(--heart-red); height: 150px; width: 150px; transform: rotate(-45deg); position: relative; box-shadow: 0 0 50px rgba(255, 10, 84, 0.5); z-index: 10; }
         .heart-node::before, .heart-node::after { content: ""; background-color: var(--heart-red); border-radius: 50%; height: 150px; width: 150px; position: absolute; }
         .heart-node::before { top: -75px; left: 0; }
         .heart-node::after { left: 75px; top: 0; }
-        #countdown-num { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(45deg); color: white; font-size: 4rem; font-weight: bold; font-family: 'Playfair Display', serif; }
+        #countdown-num { position: absolute; z-index: 20; color: white; font-size: 5rem; font-weight: bold; font-family: 'Playfair Display', serif; pointer-events: none; }
         @keyframes pulse-heart { 0% { transform: rotate(-45deg) scale(1); } 50% { transform: rotate(-45deg) scale(1.15); } 100% { transform: rotate(-45deg) scale(1); } }
 
         .loader-container { width: 100%; background: #fff; border-radius: 20px; height: 12px; margin-top: 20px; overflow: hidden; border: 1px solid #eee; }
@@ -89,7 +87,6 @@
         .popup.show { display: flex; }
         .popup.show .popup-content { transform: scale(1); opacity: 1; }
 
-        /* HEART RAIN EFFECT */
         #hearts-rain-container { position: absolute; inset: 0; pointer-events: none; z-index: 100; overflow: hidden; }
         .heart-float { position: absolute; bottom: -10%; font-size: 2rem; animation: floatUp var(--dur) linear infinite; opacity: 0; }
         @keyframes floatUp { 0% { transform: translateY(0) scale(1); opacity: 1; } 100% { transform: translateY(-110vh) scale(1.5); opacity: 0; } }
@@ -178,7 +175,10 @@
 
 <div id="slide-suspense" class="slide" style="background-color: #050505;">
     <div id="stars-container"></div>
-    <div class="heart-node" id="heart-node"><div id="countdown-num">5</div></div>
+    <div class="heart-wrapper">
+        <div class="heart-node" id="heart-node"></div>
+        <div id="countdown-num">5</div>
+    </div>
 </div>
 
 <div id="slide8" class="slide" style="background-image: url('https://i.ibb.co/JRLYybWs/IMG-0526.jpg');">
@@ -187,7 +187,7 @@
         <img src="https://i.ibb.co/bgcDdG0f/image-2026-02-11-044418153.png" alt="Spiderman-Gwen" class="embed-img">
         <div style="display: flex; gap: 20px; justify-content: center; height: 60px; position: relative; width: 100%;">
             <button onclick="handleYes()">Yes</button>
-            <button id="no-btn" onmouseover="moveNo()" ontouchstart="moveNo()" style="position:absolute; right: 10%;">No</button>
+            <button id="no-btn" onclick="showNoPopup()">No</button>
         </div>
     </div>
 </div>
@@ -201,6 +201,7 @@
 <div id="matchPopup" class="popup"><div class="popup-content"><h2>🏆 Champion! 🏆</h2><p>Yay!! you won a Hot-Chocolate ☕</p><button onclick="closeMatchPopup()">Continue</button></div></div>
 <div id="coinPopup" class="popup"><div class="popup-content"><h2>✨ Decision Time! ✨</h2><p id="coinPopupText">Looks like we are doing both! ❤️</p><button onclick="closeCoinPopup()">Yayy! Next</button></div></div>
 <div id="yesPopup" class="popup"><div class="popup-content"><h1>💖</h1><h2>Thank you for saying yes!! 💖💖</h2><button onclick="finalize()">See Our Surprise</button></div></div>
+<div id="noPopup" class="popup"><div class="popup-content"><h2>🥺</h2><p>You're not allowed to say no darling</p><button onclick="hidePopup('noPopup')">Okay ❤️</button></div></div>
 
 <script>
     const bgMusic = document.getElementById('bgMusic');
@@ -208,7 +209,18 @@
     const colors = ["#FF6B6B", "#FFD93D", "#6BCB77", "#4D96FF", "#9D4EDD", "#FF9248"];
     let startAngle = 0;
 
-    function closeIntro() { document.getElementById('intro-layer').classList.add('hidden'); bgMusic.play(); }
+    // Haptic Helper function
+    function vibrate(ms) {
+        if (window.navigator && window.navigator.vibrate) {
+            window.navigator.vibrate(ms);
+        }
+    }
+
+    function closeIntro() { 
+        vibrate(50);
+        document.getElementById('intro-layer').classList.add('hidden'); 
+        bgMusic.play(); 
+    }
 
     function nextSlide(n) {
         document.querySelectorAll('.slide').forEach(s => { s.classList.remove('active'); s.style.opacity = '0'; });
@@ -221,6 +233,7 @@
     }
 
     function startLoading(n, d) {
+        vibrate(20);
         document.getElementById('btn' + n).style.display = 'none';
         const loader = document.getElementById('loader' + n);
         const bar = loader.querySelector('.loader-bar');
@@ -250,12 +263,22 @@
     }
 
     function spinWheel() {
+        vibrate(30);
         document.getElementById('spinBtn').disabled = true;
         let vel = 0.8 + Math.random()*0.4;
+        let lastTickAngle = 0;
         function decay() {
             startAngle += vel; vel *= 0.988; setupWheel();
+            
+            // Subtle "click" haptic during wheel rotation
+            if (Math.abs(startAngle - lastTickAngle) > (Math.PI/3)) {
+                vibrate(5);
+                lastTickAngle = startAngle;
+            }
+
             if(vel > 0.001) requestAnimationFrame(decay);
             else { 
+                vibrate([30, 50, 30]);
                 const idx = Math.floor(((360 - (startAngle*180/Math.PI)%360 + 270)%360)/60);
                 document.getElementById('wheelText').innerText = "Yayy!! You got " + cuisine[idx % 6] + " 💖";
                 showPopup('wheelPopup'); 
@@ -263,7 +286,7 @@
         }
         decay();
     }
-    function closeWheelPopup() { hidePopup('wheelPopup'); nextSlide('scratch'); }
+    function closeWheelPopup() { vibrate(20); hidePopup('wheelPopup'); nextSlide('scratch'); }
 
     function initScratch() {
         const cvs = document.getElementById('scratch-canvas'); const ctx = cvs.getContext('2d');
@@ -274,7 +297,9 @@
             const r = cvs.getBoundingClientRect();
             const x = (e.pageX || e.touches[0].pageX) - r.left; const y = (e.pageY || e.touches[0].pageY) - r.top;
             ctx.globalCompositeOperation = 'destination-out'; ctx.beginPath(); ctx.arc(x, y, 25, 0, Math.PI*2); ctx.fill();
-            cleared++; if(cleared > 100) document.getElementById('scratchNext').style.display = 'block';
+            cleared++; 
+            if(cleared % 10 === 0) vibrate(5); // Tiny scratches feel
+            if(cleared > 100) document.getElementById('scratchNext').style.display = 'block';
         }
         cvs.addEventListener('touchmove', e => { e.preventDefault(); scrap(e); }, {passive: false});
         cvs.addEventListener('mousemove', e => e.buttons === 1 && scrap(e));
@@ -288,29 +313,43 @@
             const card = document.createElement('div'); card.className = 'emoji-card';
             card.innerHTML = `<div class="back"></div>${emoji}`;
             card.onclick = () => {
+                vibrate(10);
                 if(active.length < 2 && !card.classList.contains('flipped')) {
                     card.classList.add('flipped'); active.push(card);
                     if(active.length === 2) {
-                        if(active[0].innerText === active[1].innerText) { pairs++; active = []; if(pairs === 3) setTimeout(() => showPopup('matchPopup'), 600); }
-                        else { setTimeout(() => { active.forEach(c => c.classList.remove('flipped')); active = []; }, 800); }
+                        if(active[0].innerText === active[1].innerText) { 
+                            vibrate([20, 20, 20]);
+                            pairs++; active = []; if(pairs === 3) setTimeout(() => showPopup('matchPopup'), 600); 
+                        }
+                        else { 
+                            vibrate(40);
+                            setTimeout(() => { active.forEach(c => c.classList.remove('flipped')); active = []; }, 800); 
+                        }
                     }
                 }
             };
             grid.appendChild(card);
         });
     }
-    function closeMatchPopup() { hidePopup('matchPopup'); document.getElementById('matchBtnNext').style.display = 'inline-block'; }
+    function closeMatchPopup() { vibrate(20); hidePopup('matchPopup'); document.getElementById('matchBtnNext').style.display = 'inline-block'; }
 
     function flipCoin() {
+        vibrate(30);
         const coin = document.getElementById('coin');
         coin.style.transform = `translateY(-100px) rotateY(${3600 + Math.random()*360}deg)`;
-        setTimeout(() => { coin.style.transform += ` translateY(100px)`; showPopup('coinPopup'); }, 5100);
+        setTimeout(() => { 
+            vibrate([50, 30]);
+            coin.style.transform += ` translateY(100px)`; 
+            showPopup('coinPopup'); 
+        }, 5100);
     }
-    function closeCoinPopup() { hidePopup('coinPopup'); document.getElementById('coinBtnNext').style.display = 'inline-block'; }
+    function closeCoinPopup() { vibrate(20); hidePopup('coinPopup'); document.getElementById('coinBtnNext').style.display = 'inline-block'; }
 
     function startEternalCountdown() {
+        vibrate(50);
         nextSlide('suspense');
         const sc = document.getElementById('stars-container');
+        sc.innerHTML = '';
         for(let i=0; i<80; i++) {
             const s = document.createElement('div'); s.className = 'star';
             s.style.width = s.style.height = Math.random()*3+'px';
@@ -321,21 +360,39 @@
         const countEl = document.getElementById('countdown-num');
         const heart = document.getElementById('heart-node');
         const timer = setInterval(() => {
-            count--; if(count >= 0) { countEl.textContent = count; heart.style.animation = 'none'; void heart.offsetWidth; heart.style.animation = 'pulse-heart 0.6s ease-in-out'; }
+            count--; 
+            if(count >= 0) { 
+                vibrate(30); // Synchronized heart-beat haptic
+                countEl.textContent = count; 
+                heart.style.animation = 'none'; 
+                void heart.offsetWidth; 
+                heart.style.animation = 'pulse-heart 0.6s ease-in-out'; 
+            }
             if(count === 0) {
                 clearInterval(timer);
-                setTimeout(() => { countEl.innerHTML = "∞"; heart.style.backgroundColor = "#fff"; setTimeout(() => nextSlide(8), 1500); }, 1000);
+                setTimeout(() => { 
+                    vibrate([50, 100, 50]);
+                    countEl.innerHTML = "∞"; 
+                    heart.style.backgroundColor = "#fff"; 
+                    setTimeout(() => nextSlide(8), 1500); 
+                }, 1000);
             }
         }, 1000);
     }
 
-    function moveNo() { const b = document.getElementById('no-btn'); b.style.left = Math.random()*70+'%'; b.style.top = Math.random()*70+'%'; }
-    function handleYes() { confetti({ particleCount: 200, spread: 80, origin: { y: 0.6 } }); showPopup('yesPopup'); }
+    function showNoPopup() { vibrate([50, 50, 50]); showPopup('noPopup'); }
+    function handleYes() { 
+        vibrate([100, 50, 100]);
+        confetti({ particleCount: 200, spread: 80, origin: { y: 0.6 } }); 
+        showPopup('yesPopup'); 
+    }
     
     function finalize() { 
+        vibrate(200); // Grand finale vibration
         hidePopup('yesPopup'); 
         nextSlide(9); 
         const rainContainer = document.getElementById('hearts-rain-container');
+        confetti({ particleCount: 150, spread: 100, origin: { y: 0.5 } });
         setInterval(() => {
             const h = document.createElement('div'); 
             h.className = 'heart-float'; 
